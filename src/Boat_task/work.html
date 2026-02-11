@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bot Movement Simulator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #1f4037, #99f2c8);
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            width: 500px;
+            margin: auto;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        input, select {
+            width: 90%;
+            padding: 8px;
+            margin: 8px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #1f4037;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background: #14532d;
+        }
+
+        #output {
+            margin-top: 20px;
+            text-align: left;
+            max-height: 300px;
+            overflow-y: auto;
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🤖 Bot Movement Simulator</h2>
+
+    <input type="text" id="botName" placeholder="Enter Bot Name">
+
+    <input type="number" id="distance" placeholder="Enter Target Distance (meters)">
+
+    <select id="obstacle">
+        <option value="no">No Obstacle</option>
+        <option value="yes">Obstacle Present</option>
+    </select>
+
+    <button onclick="startSimulation()">Start Simulation</button>
+
+    <div id="output"></div>
+</div>
+
+<script>
+function startSimulation() {
+
+    let botName = document.getElementById("botName").value;
+    let targetDistance = parseInt(document.getElementById("distance").value);
+    let obstacleAhead = document.getElementById("obstacle").value;
+    let output = document.getElementById("output");
+
+    if (!botName || isNaN(targetDistance)) {
+        alert("Please enter valid details!");
+        return;
+    }
+
+    let distanceTravelled = 0;
+    let checkpoints = ["Start"];
+    let speedLevels = ["Slow", "Medium", "High"];
+    let speedValues = { "Slow": 1, "Medium": 2, "High": 3 };
+
+    let totalSpeedValue = 0;
+    let moveCount = 0;
+
+    // Speed Decision
+    let baseSpeed;
+
+    if (obstacleAhead === "yes") {
+        if (targetDistance > 100) {
+            baseSpeed = "Slow";
+        } else {
+            baseSpeed = "Medium";
+        }
+    } else {
+        if (targetDistance > 100) {
+            baseSpeed = "High";
+        } else if (targetDistance > 50) {
+            baseSpeed = "Medium";
+        } else {
+            baseSpeed = "Slow";
+        }
+    }
+
+    checkpoints.push("Initial Speed: " + baseSpeed);
+
+    // Simulation Loop
+    while (distanceTravelled < targetDistance) {
+
+        let detectedDistance = Math.floor(Math.random() * 51) + 10;
+
+        if (detectedDistance <= 50) {
+            let detectedType = Math.random() < 0.5 ? "human" : "object";
+
+            if (detectedType === "human") {
+                checkpoints.push("Human detected – Waiting");
+                continue;
+            } else {
+                let actions = ["Reverse", "Turn Left", "Turn Right"];
+                let action = actions[Math.floor(Math.random() * actions.length)];
+                checkpoints.push("Object detected – " + action);
+
+                if (action === "Reverse") {
+                    let stepBack = Math.floor(Math.random() * 6) + 5;
+                    distanceTravelled = Math.max(0, distanceTravelled - stepBack);
+                }
+            }
+        }
+
+        let chosenSpeed = speedLevels[Math.floor(Math.random() * speedLevels.length)];
+
+        let stepForward;
+        if (chosenSpeed === "Slow") {
+            stepForward = Math.floor(Math.random() * 4) + 5;
+        } else if (chosenSpeed === "Medium") {
+            stepForward = Math.floor(Math.random() * 4) + 9;
+        } else {
+            stepForward = Math.floor(Math.random() * 6) + 13;
+        }
+
+        if (distanceTravelled + stepForward > targetDistance) {
+            stepForward = targetDistance - distanceTravelled;
+        }
+
+        distanceTravelled += stepForward;
+        totalSpeedValue += speedValues[chosenSpeed];
+        moveCount++;
+
+        checkpoints.push("Move Forward (" + chosenSpeed + ") → " + distanceTravelled + "m");
+    }
+
+    let averageSpeed = (moveCount > 0) ? (totalSpeedValue / moveCount).toFixed(2) : 0;
+
+    // Display Output
+    output.innerHTML = `
+        <h3>------ TRIP SUMMARY ------</h3>
+        <p><b>Bot Name:</b> ${botName}</p>
+        <p><b>Target Distance:</b> ${targetDistance}m</p>
+        <p><b>Final Distance:</b> ${distanceTravelled}m</p>
+        <p><b>Initial Speed:</b> ${baseSpeed}</p>
+        <p><b>Average Speed Level:</b> ${averageSpeed}</p>
+        <h4>Journey Log:</h4>
+        <ul>
+            ${checkpoints.map(point => `<li>${point}</li>`).join("")}
+        </ul>
+    `;
+}
+</script>
+
+</body>
+</html> 

@@ -5,7 +5,7 @@ b=np.array([10,20,30])
 result=a+b
 print(result)
 
-arr=np.random.rand(1000000)
+arr=np.random.rand(100)
 squared=arr**2
 print(squared)
 
@@ -48,3 +48,36 @@ arr3 = np.array([
 
 print(arr3)
 print("Dimension:", arr3.ndim)
+
+
+arr=np.arange(12)
+reshaped=arr.reshape(3,4)
+print(reshaped)
+a=np.array([[1,2]])
+b=np.array([[3,4]])
+vstacked=np.vstack((a,b))
+print("vstack",vstacked)
+hstacked=np.hstack((a,b))
+print("hstack",hstacked)
+
+data=np.array([[10,20,30],
+               [40,50,60]])
+print(np.mean(data))
+print(np.mean(data, axis=0))
+print(np.mean(data,axis=1))
+
+A=np.array([[1,2], [3,4]])
+B=np.array([[5,6], [7,8]])
+print(np.dot(A,B))
+
+
+arr=np.linspace(0,3,5)
+print(arr)
+
+arr=np.random.rand(2,2)
+print(arr)
+
+arr=np.array([1.2,2.8,-3.7])
+print(np.floor(arr))
+
+

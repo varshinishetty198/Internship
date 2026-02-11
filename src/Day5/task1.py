@@ -1,6 +1,6 @@
 def calc_rectangle(length, width):
     area = length * width
-    perimeter = 2 * (length + width)
+    perimeter = 2 * (length+ width)
     
     return area, perimeter
 l=float(input("Enter length: "))
