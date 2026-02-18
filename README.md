@@ -2,7 +2,7 @@
 
 This repository documents my structured learning journey during a **Data Science & Artificial Intelligence Internship**.
 
-The internship was designed to build strong foundational knowledge in:
+The internship was designed to build strong foundational knowledge in :
 
 - Python programming  
 - Data structures  
