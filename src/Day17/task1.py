@@ -1,10 +1,8 @@
 import sqlite3
 
-# Connect to database (creates file if not exists)
 conn = sqlite3.connect("internship.db")
 cursor = conn.cursor()
 
-# Create table
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS interns (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -14,10 +12,8 @@ CREATE TABLE IF NOT EXISTS interns (
 )
 """)
 
-# Optional: Clear old data to avoid duplicates when running multiple times
 cursor.execute("DELETE FROM interns")
 
-# Insert sample data
 intern_data = [
     ("Ananya", "Data Science", 15000),
     ("Rahul", "Web Dev", 12000),
@@ -33,7 +29,6 @@ cursor.executemany(
 
 conn.commit()
 
-# SELECT only name and track
 cursor.execute("SELECT name, track FROM interns")
 
 rows = cursor.fetchall()
@@ -44,5 +39,4 @@ print("-----------------------")
 for row in rows:
     print(f" {row[0]} |  {row[1]}")
 
-# Close connection
 conn.close()
